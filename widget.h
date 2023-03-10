@@ -3,7 +3,9 @@
 
 #include <QWidget>
 #include <QMessageBox>
+#include <QSqlDatabase>
 #include <opencv2/opencv.hpp>
+#include <sqliteoperator.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -32,6 +34,8 @@ private slots:
     void camera_get_frame();
 
 
+    void on_insert_data_btn_clicked();
+
 private:
     Ui::Widget *ui;
     QTimer *set_time_timer;  // timer to update the time
@@ -41,6 +45,7 @@ private:
     cv::Mat frame_mat;
     bool is_camera_opened = false;
 
-
+    QPixmap pixmap; // pixmap to share the img that camera have collected
+    SqliteOperator *sql_op;
 };
 #endif // WIDGET_H

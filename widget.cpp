@@ -26,6 +26,7 @@ Widget::~Widget()
     delete ui;
     delete set_time_timer;
     delete camera_get_frame_timer;
+
 }
 
 
@@ -72,6 +73,12 @@ void Widget::progame_init()
     camera_get_frame_timer = new QTimer();
     connect(camera_get_frame_timer, SIGNAL(timeout()), this, SLOT(camera_get_frame()));
 
+    // set record table style
+    ui->bat_record_ti->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    // init the sqlite database
+    sql_op = new SqliteOperator(ui);
+    sql_op->create_DB();
+
     return;
 }
 
@@ -100,6 +107,7 @@ void Widget::on_camera_open_close_btn_clicked()
         camera_get_frame_timer->start(33);
         ui->camera_open_close_btn->setText("关闭摄像头");
         is_camera_opened = true;
+        ui->insert_data_btn->setEnabled(true);
     }
     else if(is_camera_opened)
     {
@@ -114,7 +122,7 @@ void Widget::on_camera_open_close_btn_clicked()
         videocaptrue = nullptr;
         ui->camera_open_close_btn->setText("打开摄像头");
         is_camera_opened = false;
-
+        ui->insert_data_btn->setEnabled(false);
     }
 }
 
@@ -139,8 +147,17 @@ void Widget::camera_get_frame()
     static cv::Mat dst;
     videocaptrue->read(frame_mat);
     dst = frame_mat.clone();
-    QPixmap pixmap = Mat2Image(dst);
+    pixmap = Mat2Image(dst);
     ui->camera_window_lb->setPixmap(pixmap);
     return;
+}
+
+
+
+
+// temporarily used for testing sqlite database
+void Widget::on_insert_data_btn_clicked()
+{
+
 }
 

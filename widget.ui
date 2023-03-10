@@ -114,7 +114,7 @@
        <attribute name="title">
         <string>蝙蝠识别</string>
        </attribute>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>0</x>
@@ -150,6 +150,16 @@
             </widget>
            </item>
            <item>
+            <widget class="QPushButton" name="insert_data_btn">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>(插入数据)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="verticalSpacer">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -171,6 +181,67 @@
        <attribute name="title">
         <string>数据记录</string>
        </attribute>
+       <widget class="QTableWidget" name="bat_record_ti">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>891</width>
+          <height>501</height>
+         </rect>
+        </property>
+        <attribute name="horizontalHeaderVisible">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="horizontalHeaderCascadingSectionResizes">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="horizontalHeaderHighlightSections">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="horizontalHeaderStretchLastSection">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="verticalHeaderCascadingSectionResizes">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+         <bool>false</bool>
+        </attribute>
+        <column>
+         <property name="text">
+          <string>序号</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>捕获图像</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>时间戳</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>预测类别</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>同步状态</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>操作</string>
+         </property>
+        </column>
+       </widget>
       </widget>
      </widget>
     </item>
