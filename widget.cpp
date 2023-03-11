@@ -26,6 +26,7 @@ Widget::~Widget()
     delete ui;
     delete set_time_timer;
     delete camera_get_frame_timer;
+    delete sql_op;
 
 }
 
@@ -73,11 +74,19 @@ void Widget::progame_init()
     camera_get_frame_timer = new QTimer();
     connect(camera_get_frame_timer, SIGNAL(timeout()), this, SLOT(camera_get_frame()));
 
-    // set record table style
-    ui->bat_record_ti->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+
     // init the sqlite database
     sql_op = new SqliteOperator(ui);
     sql_op->create_DB();
+
+    // init the tablewidget show style
+    ui->bat_record_tw->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->bat_record_tw->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->bat_record_tw->setRowCount(sql_op->fetchRecordsNum());
+    sql_op->refreshTable();
+
+
 
     return;
 }
@@ -97,7 +106,7 @@ void Widget::on_camera_open_close_btn_clicked()
     if(!is_camera_opened)
     {
         qDebug() << "Camera is opened";
-        videocaptrue = new cv::VideoCapture(1);
+        videocaptrue = new cv::VideoCapture(0);
         if(!(videocaptrue->isOpened()))
         {
             qDebug() << "camera open failed";
@@ -156,8 +165,15 @@ void Widget::camera_get_frame()
 
 
 // temporarily used for testing sqlite database
+// should run on new thread
 void Widget::on_insert_data_btn_clicked()
 {
-
+    QByteArray byte_arr;;
+    QBuffer buffer(&byte_arr);
+    buffer.open(QIODevice::WriteOnly);
+    pixmap.save(&buffer, "png", 0);
+    QString test_class = "test_class";
+    sql_op->insertData(byte_arr, test_class);
 }
+
 

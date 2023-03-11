@@ -5,7 +5,9 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDebug>
-#include "ui_widget.h"
+#include <QFile>
+#include <QDateTime>
+#include <ui_widget.h>
 
 #define DATABASE_CONNECTION_NAME "qt_sql_default_connection"
 #define DATABASE_TYPE "QSQLITE"
@@ -15,7 +17,7 @@
 class SqliteOperator
 {
 public:
-    SqliteOperator(Ui::Widget *ui);
+    SqliteOperator(Ui::Widget *);
 
     // create the database
     void create_DB();
@@ -26,16 +28,18 @@ public:
     // close the database
     void close_DB();
     // insert the record to table
-    void insertData();
+    void insertData(const QByteArray&, const QString);
     // update the record
     void updateData();
-    // fetch the record and show in the Itemtable
+    // fetch the record and show in the table widget
     void refreshTable();
+    // fetch the records num
+    unsigned int fetchRecordsNum();
 
 private:
-    Ui::Widget* ui;
     QSqlDatabase db;
-
+    Ui::Widget* ui;
+    unsigned int count;
 };
 
 #endif // SQLITEOPERATOR_H

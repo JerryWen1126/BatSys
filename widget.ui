@@ -108,7 +108,7 @@
        <enum>QTabWidget::West</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="bat_recognition_tab">
        <attribute name="title">
@@ -181,7 +181,7 @@
        <attribute name="title">
         <string>数据记录</string>
        </attribute>
-       <widget class="QTableWidget" name="bat_record_ti">
+       <widget class="QTableWidget" name="bat_record_tw">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -190,19 +190,37 @@
           <height>501</height>
          </rect>
         </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>200</width>
+          <height>200</height>
+         </size>
+        </property>
+        <property name="sortingEnabled">
+         <bool>true</bool>
+        </property>
         <attribute name="horizontalHeaderVisible">
          <bool>true</bool>
         </attribute>
         <attribute name="horizontalHeaderCascadingSectionResizes">
          <bool>false</bool>
         </attribute>
+        <attribute name="horizontalHeaderDefaultSectionSize">
+         <number>100</number>
+        </attribute>
         <attribute name="horizontalHeaderHighlightSections">
          <bool>true</bool>
         </attribute>
         <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-         <bool>false</bool>
+         <bool>true</bool>
         </attribute>
         <attribute name="horizontalHeaderStretchLastSection">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="verticalHeaderVisible">
          <bool>false</bool>
         </attribute>
         <attribute name="verticalHeaderCascadingSectionResizes">

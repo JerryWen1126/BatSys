@@ -48,7 +48,7 @@ public:
     QPushButton *insert_data_btn;
     QSpacerItem *verticalSpacer;
     QWidget *data_record_tab;
-    QTableWidget *bat_record_ti;
+    QTableWidget *bat_record_tw;
 
     void setupUi(QWidget *Widget)
     {
@@ -160,30 +160,35 @@ public:
         tabWidget->addTab(bat_recognition_tab, QString());
         data_record_tab = new QWidget();
         data_record_tab->setObjectName(QString::fromUtf8("data_record_tab"));
-        bat_record_ti = new QTableWidget(data_record_tab);
-        if (bat_record_ti->columnCount() < 6)
-            bat_record_ti->setColumnCount(6);
+        bat_record_tw = new QTableWidget(data_record_tab);
+        if (bat_record_tw->columnCount() < 6)
+            bat_record_tw->setColumnCount(6);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
-        bat_record_ti->setHorizontalHeaderItem(0, __qtablewidgetitem);
+        bat_record_tw->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
-        bat_record_ti->setHorizontalHeaderItem(1, __qtablewidgetitem1);
+        bat_record_tw->setHorizontalHeaderItem(1, __qtablewidgetitem1);
         QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
-        bat_record_ti->setHorizontalHeaderItem(2, __qtablewidgetitem2);
+        bat_record_tw->setHorizontalHeaderItem(2, __qtablewidgetitem2);
         QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
-        bat_record_ti->setHorizontalHeaderItem(3, __qtablewidgetitem3);
+        bat_record_tw->setHorizontalHeaderItem(3, __qtablewidgetitem3);
         QTableWidgetItem *__qtablewidgetitem4 = new QTableWidgetItem();
-        bat_record_ti->setHorizontalHeaderItem(4, __qtablewidgetitem4);
+        bat_record_tw->setHorizontalHeaderItem(4, __qtablewidgetitem4);
         QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
-        bat_record_ti->setHorizontalHeaderItem(5, __qtablewidgetitem5);
-        bat_record_ti->setObjectName(QString::fromUtf8("bat_record_ti"));
-        bat_record_ti->setGeometry(QRect(10, 10, 891, 501));
-        bat_record_ti->horizontalHeader()->setVisible(true);
-        bat_record_ti->horizontalHeader()->setCascadingSectionResizes(false);
-        bat_record_ti->horizontalHeader()->setHighlightSections(true);
-        bat_record_ti->horizontalHeader()->setProperty("showSortIndicator", QVariant(false));
-        bat_record_ti->horizontalHeader()->setStretchLastSection(false);
-        bat_record_ti->verticalHeader()->setCascadingSectionResizes(false);
-        bat_record_ti->verticalHeader()->setProperty("showSortIndicator", QVariant(false));
+        bat_record_tw->setHorizontalHeaderItem(5, __qtablewidgetitem5);
+        bat_record_tw->setObjectName(QString::fromUtf8("bat_record_tw"));
+        bat_record_tw->setGeometry(QRect(10, 10, 891, 501));
+        bat_record_tw->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        bat_record_tw->setIconSize(QSize(200, 200));
+        bat_record_tw->setSortingEnabled(true);
+        bat_record_tw->horizontalHeader()->setVisible(true);
+        bat_record_tw->horizontalHeader()->setCascadingSectionResizes(false);
+        bat_record_tw->horizontalHeader()->setDefaultSectionSize(100);
+        bat_record_tw->horizontalHeader()->setHighlightSections(true);
+        bat_record_tw->horizontalHeader()->setProperty("showSortIndicator", QVariant(true));
+        bat_record_tw->horizontalHeader()->setStretchLastSection(false);
+        bat_record_tw->verticalHeader()->setVisible(false);
+        bat_record_tw->verticalHeader()->setCascadingSectionResizes(false);
+        bat_record_tw->verticalHeader()->setProperty("showSortIndicator", QVariant(false));
         tabWidget->addTab(data_record_tab, QString());
 
         verticalLayout->addWidget(tabWidget);
@@ -191,7 +196,7 @@ public:
 
         retranslateUi(Widget);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(Widget);
@@ -212,17 +217,17 @@ public:
         camera_open_close_btn->setText(QCoreApplication::translate("Widget", "\346\211\223\345\274\200\346\221\204\345\203\217\345\244\264", nullptr));
         insert_data_btn->setText(QCoreApplication::translate("Widget", "(\346\217\222\345\205\245\346\225\260\346\215\256)", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(bat_recognition_tab), QCoreApplication::translate("Widget", "\350\235\231\350\235\240\350\257\206\345\210\253", nullptr));
-        QTableWidgetItem *___qtablewidgetitem = bat_record_ti->horizontalHeaderItem(0);
+        QTableWidgetItem *___qtablewidgetitem = bat_record_tw->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QCoreApplication::translate("Widget", "\345\272\217\345\217\267", nullptr));
-        QTableWidgetItem *___qtablewidgetitem1 = bat_record_ti->horizontalHeaderItem(1);
+        QTableWidgetItem *___qtablewidgetitem1 = bat_record_tw->horizontalHeaderItem(1);
         ___qtablewidgetitem1->setText(QCoreApplication::translate("Widget", "\346\215\225\350\216\267\345\233\276\345\203\217", nullptr));
-        QTableWidgetItem *___qtablewidgetitem2 = bat_record_ti->horizontalHeaderItem(2);
+        QTableWidgetItem *___qtablewidgetitem2 = bat_record_tw->horizontalHeaderItem(2);
         ___qtablewidgetitem2->setText(QCoreApplication::translate("Widget", "\346\227\266\351\227\264\346\210\263", nullptr));
-        QTableWidgetItem *___qtablewidgetitem3 = bat_record_ti->horizontalHeaderItem(3);
+        QTableWidgetItem *___qtablewidgetitem3 = bat_record_tw->horizontalHeaderItem(3);
         ___qtablewidgetitem3->setText(QCoreApplication::translate("Widget", "\351\242\204\346\265\213\347\261\273\345\210\253", nullptr));
-        QTableWidgetItem *___qtablewidgetitem4 = bat_record_ti->horizontalHeaderItem(4);
+        QTableWidgetItem *___qtablewidgetitem4 = bat_record_tw->horizontalHeaderItem(4);
         ___qtablewidgetitem4->setText(QCoreApplication::translate("Widget", "\345\220\214\346\255\245\347\212\266\346\200\201", nullptr));
-        QTableWidgetItem *___qtablewidgetitem5 = bat_record_ti->horizontalHeaderItem(5);
+        QTableWidgetItem *___qtablewidgetitem5 = bat_record_tw->horizontalHeaderItem(5);
         ___qtablewidgetitem5->setText(QCoreApplication::translate("Widget", "\346\223\215\344\275\234", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(data_record_tab), QCoreApplication::translate("Widget", "\346\225\260\346\215\256\350\256\260\345\275\225", nullptr));
     } // retranslateUi
