@@ -18,6 +18,7 @@ HEADERS += \
     widget.h
 
 FORMS += \
+    edit_dialog.ui \
     widget.ui
 
 # Default rules for deployment.

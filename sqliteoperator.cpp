@@ -1,11 +1,20 @@
 #include "sqliteoperator.h"
 
-SqliteOperator::SqliteOperator(Ui::Widget *ui)
+SqliteOperator::SqliteOperator(Ui::Widget *ui, QWidget *parent)
+    :QObject(parent)
 {
     this->ui = ui;
 }
 
-
+SqliteOperator::~SqliteOperator()
+{
+    // don't delete ui here
+    if(is_edit_dialog_opened)
+    {
+        delete edit_ui;
+        delete dialog;
+    }
+}
 
 
 void SqliteOperator::create_DB()
@@ -103,25 +112,51 @@ void SqliteOperator::insertData(const QByteArray &arr, const QString predict_cla
     return;
 }
 
+bool SqliteOperator::removeData(unsigned int id)
+{
+    open_DB();
+    QString delete_data_command = "delete from bat_record where id = :id;";
+    QSqlQuery sql_query;
+    sql_query.prepare(delete_data_command);
+    sql_query.bindValue(":id", id);
+    qDebug() << "id:" << id << " try to remove...";
+    if(!sql_query.exec())
+    {
+        qDebug() << "Error:Failed to remove the data." << sql_query.lastError();
+        close_DB();
+        return false;
+    }
+    else
+    {
+        qDebug() << "Data removed!";
+        close_DB();
+        return true;
+    }
+}
 
-//void SqliteOperator::updateData()
-//{
-//    QString update_data_command = "update bat_record set classification = :classification where id = :id";
-//    QSqlQuery sql_query;
-//    sql_query.prepare(update_data_command);
-//    sql_query.bindValue(":name", );
-//    sql_query.bindValue(":id", );
+bool SqliteOperator::updateData()
+{
+    QString update_data_command = "update bat_record set classification = :classification where id = :id;";
+    QSqlQuery sql_query;
+    sql_query.prepare(update_data_command);
+    sql_query.bindValue(":classification", edit_ui->predict_cb->currentText());
+    sql_query.bindValue(":id", edit_ui->id_le->text());
 
-//    if(!sql_query.exec())
-//        qDebug() << "Error:Failed to update the data." << sql_query.lastError();
-//    else
-//        qDebug() << "Data updated!";
-
-//    return;
-//}
+    if(!sql_query.exec())
+    {
+        qDebug() << "Error:Failed to update the data." << sql_query.lastError();
+        return false;
+    }
+    else
+    {
+        qDebug() << "Data updated!";
+        return true;
+    }
+}
 
 void SqliteOperator::refreshTable()
 {
+    ui->bat_record_tw->setRowCount(fetchRecordsNum());
     open_DB();
     QSqlQuery sql_query;
     QString query_command = "select * from bat_record";
@@ -131,6 +166,7 @@ void SqliteOperator::refreshTable()
     else
     {
         qDebug() << "Table refreshed!";
+        unsigned int row_id = 0;
         while(sql_query.next())
         {
             // sql_query.value() return a QVariant
@@ -145,8 +181,7 @@ void SqliteOperator::refreshTable()
             QString classifation = sql_query.value("classification").toString();
             bool sync_status = sql_query.value("sync_status").toBool();
 
-            int row_id = id - 1;
-
+            qDebug() << "Currrnt row_id is:" << row_id;
             ui->bat_record_tw->setItem(row_id, 0, new QTableWidgetItem(QString::number(id)));
             ui->bat_record_tw->item(row_id, 0)->setTextAlignment(Qt::AlignCenter);
 
@@ -181,13 +216,16 @@ void SqliteOperator::refreshTable()
             tmp_layout->addWidget(delete_btn);
             tmp_layout->setMargin(15);
             ui->bat_record_tw->setCellWidget(row_id, 5, tmp_widget);
+
+            connect(edit_btn, SIGNAL(clicked(bool)), this, SLOT(on_edit_item_btn_clicked()));
+            connect(delete_btn, SIGNAL(clicked(bool)), this, SLOT(on_delete_item_btn_clicked()));
+            row_id++;
         }
 
     }
     close_DB();
     return;
 }
-
 
 unsigned int SqliteOperator::fetchRecordsNum()
 {
@@ -209,3 +247,86 @@ unsigned int SqliteOperator::fetchRecordsNum()
     close_DB();
     return count;
 }
+
+void SqliteOperator::on_edit_item_btn_clicked()
+{
+    // get the clicked item's row and column
+    QPushButton *btn = dynamic_cast<QPushButton *>(this->sender());
+    int x = btn->parentWidget()->frameGeometry().x();
+    int y = btn->parentWidget()->frameGeometry().y();
+    QModelIndex model_index = ui->bat_record_tw->indexAt(QPoint(x, y));
+    unsigned int row = model_index.row();
+
+    // edit interface
+    is_edit_dialog_opened = true;
+    edit_ui = new Ui::edit_dialog();
+    dialog = new QDialog();
+
+    // code below should be put after setupUI
+    edit_ui->setupUi(dialog);
+
+    edit_ui->id_le->setText(ui->bat_record_tw->item(row, 0)->text());
+    edit_ui->timestamp_le->setText(ui->bat_record_tw->item(row, 2)->text());
+    for(int option = 0; option < edit_ui->predict_cb->count(); option++)
+    {
+        if(QString::compare(edit_ui->predict_cb->itemText(option), ui->bat_record_tw->item(row, 3)->text()) == 0)
+        {
+            edit_ui->predict_cb->setCurrentIndex(option);
+            break;
+        }
+    }
+    edit_ui->sync_status_le->setText(ui->bat_record_tw->item(row, 4)->text());
+
+    edit_ui->id_le->setEnabled(false);
+    edit_ui->timestamp_le->setEnabled(false);
+    edit_ui->sync_status_le->setEnabled(false);
+    edit_ui->buttonBox->button(QDialogButtonBox::Ok)->setText("确认");
+    edit_ui->buttonBox->button(QDialogButtonBox::Cancel)->setText("取消");
+    connect(edit_ui->buttonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked(bool)), this, SLOT(on_confirm_edit_btn_clicked()));
+
+    dialog->setFixedSize(dialog->width(), dialog->height());
+    dialog->setWindowModality(Qt::WindowModal);
+    dialog->show();
+}
+
+void SqliteOperator::on_delete_item_btn_clicked()
+{
+    // get the clicked item's row and column
+    QPushButton *btn = dynamic_cast<QPushButton *>(this->sender());
+    int x = btn->parentWidget()->frameGeometry().x();
+    int y = btn->parentWidget()->frameGeometry().y();
+    QModelIndex model_index = ui->bat_record_tw->indexAt(QPoint(x, y));
+    unsigned int row = model_index.row();
+    unsigned int id = ui->bat_record_tw->item(row, 0)->text().toInt();
+
+    QMessageBox delete_msg(QMessageBox::Question, "删除记录", "真的要删除吗？", QMessageBox::Yes|QMessageBox::No);
+    delete_msg.setButtonText(QMessageBox::Yes, "是");
+    delete_msg.setButtonText(QMessageBox::No, "否");
+    switch (delete_msg.exec()){
+    case QMessageBox::Yes:
+        qDebug() << "YES";
+        removeData(id);
+        refreshTable();
+        break;
+
+    case QMessageBox::No:
+        qDebug() << "NO";
+        break;
+
+    default:
+        break;
+    }
+}
+
+void SqliteOperator::on_confirm_edit_btn_clicked()
+{
+    open_DB();
+    if(!updateData())// TODO
+        QMessageBox::critical(nullptr, "警告", "数据库连接失败", QMessageBox::Ok);
+    else refreshTable();
+
+    close_DB();
+    return;
+}
+
+

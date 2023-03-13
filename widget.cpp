@@ -1,10 +1,7 @@
 #include "widget.h"
 #include "ui_widget.h"
 
-#include <QTimer>
-#include <QDateTime>
-#include <QDebug>
-#include <opencv2/core.hpp>
+
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -81,9 +78,9 @@ void Widget::progame_init()
     sql_op->create_DB();
 
     // init the tablewidget show style
-    ui->bat_record_tw->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->bat_record_tw->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->bat_record_tw->setRowCount(sql_op->fetchRecordsNum());
+    ui->bat_record_tw->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->bat_record_tw->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
     sql_op->refreshTable();
 
 
@@ -172,7 +169,7 @@ void Widget::on_insert_data_btn_clicked()
     QBuffer buffer(&byte_arr);
     buffer.open(QIODevice::WriteOnly);
     pixmap.save(&buffer, "png", 0);
-    QString test_class = "test_class";
+    QString test_class = "test_class1";
     sql_op->insertData(byte_arr, test_class);
 }
 

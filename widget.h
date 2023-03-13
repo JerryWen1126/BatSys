@@ -7,9 +7,15 @@
 #include <opencv2/opencv.hpp>
 #include <sqliteoperator.h>
 #include <QBuffer>
+#include <QTimer>
+#include <QDateTime>
+#include <QDebug>
+#include <opencv2/core.hpp>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class Widget; }
+namespace Ui { class Widget;
+               class item_edit;
+             }
 QT_END_NAMESPACE
 
 
