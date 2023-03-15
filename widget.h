@@ -11,6 +11,8 @@
 #include <QDateTime>
 #include <QDebug>
 #include <opencv2/core.hpp>
+#include <QDir>
+#include <QWebChannel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget;
@@ -30,6 +32,8 @@ public:
     ~Widget();
 
     void progame_init();
+    void get_camera_index();
+    void webmap_init();
 
 private slots:
     void on_exit_btn_clicked();
@@ -40,8 +44,12 @@ private slots:
 
     void camera_get_frame();
 
+    void on_locate_btn_clicked();
 
     void on_insert_data_btn_clicked();
+    void on_tabWidget_currentChanged(int index);
+    void on_is_csi_camera_cb_stateChanged(int arg1);
+
 
 private:
     Ui::Widget *ui;

@@ -70,7 +70,7 @@ void Widget::progame_init()
     videocaptrue = nullptr;
     camera_get_frame_timer = new QTimer();
     connect(camera_get_frame_timer, SIGNAL(timeout()), this, SLOT(camera_get_frame()));
-
+    get_camera_index();
 
 
     // init the sqlite database
@@ -80,9 +80,10 @@ void Widget::progame_init()
     // init the tablewidget show style
     ui->bat_record_tw->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->bat_record_tw->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-
     sql_op->refreshTable();
 
+    // init the web map
+    webmap_init();
 
 
     return;
@@ -103,11 +104,16 @@ void Widget::on_camera_open_close_btn_clicked()
     if(!is_camera_opened)
     {
         qDebug() << "Camera is opened";
-        videocaptrue = new cv::VideoCapture(0);
+
+        QString camera_file_name = ui->camera_index_cb->currentText();
+        int camera_index = QString(camera_file_name.at(camera_file_name.size() - 1)).toInt();
+
+        videocaptrue = new cv::VideoCapture(camera_index);
+
         if(!(videocaptrue->isOpened()))
         {
             qDebug() << "camera open failed";
-            QMessageBox::critical(this, "警告", "摄像头打开失败", QMessageBox::Ok);
+            QMessageBox::critical(this, "警告", QString("摄像头(%1)打开失败").arg(camera_file_name), QMessageBox::Ok);
             return;
         }
         camera_get_frame_timer->start(33);
@@ -170,7 +176,68 @@ void Widget::on_insert_data_btn_clicked()
     buffer.open(QIODevice::WriteOnly);
     pixmap.save(&buffer, "png", 0);
     QString test_class = "test_class1";
-    sql_op->insertData(byte_arr, test_class);
+    QString test_chance = "90.00%";
+    sql_op->insertData(byte_arr, test_class, test_chance);
 }
 
+
+void Widget::get_camera_index()
+{
+    QDir dir("/dev");
+    QStringList filter = QStringList() << "video*";
+    QStringList camera_files = dir.entryList(filter, QDir::System|QDir::Files);
+    ui->camera_index_cb->addItems(camera_files);
+}
+
+
+void Widget::webmap_init()
+{
+    QString map_html_path = QCoreApplication::applicationDirPath() + "/html/map.html";
+    qDebug() << map_html_path;
+
+    QFile file(map_html_path);
+    if(!file.exists())
+    {
+        qDebug() << "map html does not exist!";
+        QMessageBox::critical(this, "警告", QString("网页地图文件(%1)不存在").arg(map_html_path), QMessageBox::Ok);
+        return;
+    }
+    // build a channel to html
+    QWebChannel *webchannel = new QWebChannel(ui->webmap_wev->page());
+    ui->webmap_wev->page()->setWebChannel(webchannel);
+    webchannel->registerObject(QString("JSInterface"), ui->webmap_wev);
+
+
+    ui->webmap_wev->page()->load(QUrl("file:///" + map_html_path));
+
+}
+
+
+void Widget::on_locate_btn_clicked()
+{
+    qDebug() << "locate clicked!";
+    QString lat = ui->latitude_dsb->text();
+    QString lng = ui->longtitude_dsb->text();
+    QString command = QString("addMarker(%1, %2)").arg(lat, lng);
+    qDebug() << command;
+    ui->webmap_wev->page()->runJavaScript(command);
+}
+
+void Widget::on_tabWidget_currentChanged(int index)
+{
+    if(index == 1)
+        sql_op->refreshTable();
+    return;
+}
+
+void Widget::on_is_csi_camera_cb_stateChanged(int arg1)
+{
+    qDebug() << "arg1:" << arg1;
+    if(arg1 == 2)   // checkbox is on
+    {
+        ui->camera_index_cb->setEnabled(false);
+    }
+    else
+        ui->camera_index_cb->setEnabled(true);
+}
 

@@ -55,6 +55,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QLabel" name="predict_chance_lb">
+          <property name="text">
+           <string>置信度:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QLabel" name="sync_status_lb">
           <property name="text">
            <string>同步状态:</string>
@@ -115,6 +122,13 @@
             <string>test_class4</string>
            </property>
           </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="predict_chance_le">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
         <item>

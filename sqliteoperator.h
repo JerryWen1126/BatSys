@@ -32,7 +32,7 @@ public:
     // close the database
     void close_DB();
     // insert the record to table
-    void insertData(const QByteArray&, const QString);
+    void insertData(const QByteArray&, const QString, const QString);
     // update the record
     bool updateData();
     // remove the record
@@ -46,6 +46,9 @@ private slots:
     void on_edit_item_btn_clicked();
     void on_delete_item_btn_clicked();
     void on_confirm_edit_btn_clicked();
+
+
+
 
 private:
     QSqlDatabase db;

@@ -1,4 +1,4 @@
-QT       += core gui sql
+QT       += core gui sql webenginewidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -58,3 +58,6 @@ unix:!macx: LIBS += -L$$PWD/../../../../usr/local/lib/ -lopencv_videoio
 
 INCLUDEPATH += $$PWD/../../../../usr/local/include
 DEPENDPATH += $$PWD/../../../../usr/local/include
+
+DISTFILES += \
+    html/map.html

@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>pic/camera_off.png</file>
         <file>pic/icon.png</file>
+        <file>html/map.html</file>
     </qresource>
 </RCC>
