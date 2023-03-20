@@ -24,6 +24,7 @@ Widget::~Widget()
     delete set_time_timer;
     delete camera_get_frame_timer;
     delete sql_op;
+    delete gps_op;
 
 }
 
@@ -84,6 +85,11 @@ void Widget::progame_init()
 
     // init the web map
     webmap_init();
+
+    // init the gps device
+    gps_op = new GPSDevice(ui);
+    connect(ui->openserial_btn, SIGNAL(clicked(bool)), gps_op, SLOT(on_openserial_btn_clicked()));
+
 
 
     return;
@@ -213,16 +219,6 @@ void Widget::webmap_init()
 }
 
 
-void Widget::on_locate_btn_clicked()
-{
-    qDebug() << "locate clicked!";
-    QString lat = ui->latitude_dsb->text();
-    QString lng = ui->longtitude_dsb->text();
-    QString command = QString("addMarker(%1, %2)").arg(lat, lng);
-    qDebug() << command;
-    ui->webmap_wev->page()->runJavaScript(command);
-}
-
 void Widget::on_tabWidget_currentChanged(int index)
 {
     if(index == 1)
@@ -240,4 +236,15 @@ void Widget::on_is_csi_camera_cb_stateChanged(int arg1)
     else
         ui->camera_index_cb->setEnabled(true);
 }
+
+void Widget::on_gps_locate_btn_clicked()
+{
+    qDebug() << "locate clicked!";
+    QString lat = ui->latitude_le->text().split(" ")[0];
+    QString lng = ui->longtitude_le->text().split(" ")[0];
+    QString command = QString("addMarker(%1, %2)").arg(lng, lat);
+    qDebug() << command;
+    ui->webmap_wev->page()->runJavaScript(command);
+}
+
 

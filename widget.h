@@ -13,6 +13,7 @@
 #include <opencv2/core.hpp>
 #include <QDir>
 #include <QWebChannel>
+#include <gps_device.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget;
@@ -44,11 +45,11 @@ private slots:
 
     void camera_get_frame();
 
-    void on_locate_btn_clicked();
 
     void on_insert_data_btn_clicked();
-    void on_tabWidget_currentChanged(int index);
-    void on_is_csi_camera_cb_stateChanged(int arg1);
+    void on_tabWidget_currentChanged(int);
+    void on_is_csi_camera_cb_stateChanged(int);
+    void on_gps_locate_btn_clicked();
 
 
 private:
@@ -62,5 +63,7 @@ private:
 
     QPixmap pixmap; // pixmap to share the img that camera have collected
     SqliteOperator *sql_op;
+    GPSDevice *gps_op;
+
 };
 #endif // WIDGET_H

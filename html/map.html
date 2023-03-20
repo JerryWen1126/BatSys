@@ -39,11 +39,11 @@ new QWebChannel(qt.webChannelTransport,
 );
 
 
-function addMarker(lat, lng){
+function addMarker(lng, lat){
     map.clearOverlays();
-    var newpoint = new BMapGL.Point(lat, lng);
+    var newpoint = new BMapGL.Point(lng, lat);
     var newmarker = new BMapGL.Marker(newpoint);
     map.addOverlay(newmarker);
-    map.centerAndZoom(newpoint, 12);
+    map.centerAndZoom(newpoint, 18);
 };
 </script>
