@@ -348,3 +348,6 @@ void SqliteOperator::on_confirm_edit_btn_clicked()
 
 
 
+
+
+

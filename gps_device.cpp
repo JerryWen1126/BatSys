@@ -8,7 +8,7 @@ GPSDevice::GPSDevice(Ui::Widget *ui, QWidget *parent)
     connect(&timer, &QTimer::timeout, this, &GPSDevice::GPS_read);
     connect(serial, &QSerialPort::readyRead, this, [&]()
     {
-       timer.start(100);
+       timer.start(50);
        buffer.append(serial->readAll());
     });
 

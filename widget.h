@@ -50,6 +50,7 @@ private slots:
     void on_tabWidget_currentChanged(int);
     void on_is_csi_camera_cb_stateChanged(int);
     void on_gps_locate_btn_clicked();
+    void on_server_connect_btn_clicked();
 
 
 private:

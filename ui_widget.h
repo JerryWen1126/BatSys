@@ -13,6 +13,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -80,9 +81,22 @@ public:
     QLabel *satellite_num_lb;
     QLineEdit *satellite_num_le;
     QSpacerItem *verticalSpacer_2;
+    QWidget *tab;
+    QFrame *frame;
     QWidget *layoutWidget3;
-    QHBoxLayout *horizontalLayout_5;
+    QVBoxLayout *verticalLayout_7;
+    QHBoxLayout *horizontalLayout_12;
+    QVBoxLayout *verticalLayout_3;
+    QLabel *ip_lb;
+    QLabel *port_lb;
+    QVBoxLayout *verticalLayout_6;
+    QLineEdit *ip_le;
+    QLineEdit *port_le;
+    QPushButton *server_connect_btn;
+    QLabel *label_3;
     QWidget *layoutWidget4;
+    QHBoxLayout *horizontalLayout_5;
+    QWidget *layoutWidget5;
     QHBoxLayout *horizontalLayout_6;
 
     void setupUi(QWidget *Widget)
@@ -380,25 +394,86 @@ public:
         horizontalLayout_8->addLayout(verticalLayout_4);
 
         tabWidget->addTab(device_location_tab, QString());
+        tab = new QWidget();
+        tab->setObjectName(QString::fromUtf8("tab"));
+        frame = new QFrame(tab);
+        frame->setObjectName(QString::fromUtf8("frame"));
+        frame->setGeometry(QRect(20, 20, 221, 131));
+        frame->setFrameShape(QFrame::Box);
+        frame->setFrameShadow(QFrame::Sunken);
+        layoutWidget3 = new QWidget(frame);
+        layoutWidget3->setObjectName(QString::fromUtf8("layoutWidget3"));
+        layoutWidget3->setGeometry(QRect(10, 10, 201, 111));
+        verticalLayout_7 = new QVBoxLayout(layoutWidget3);
+        verticalLayout_7->setObjectName(QString::fromUtf8("verticalLayout_7"));
+        verticalLayout_7->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout_12 = new QHBoxLayout();
+        horizontalLayout_12->setObjectName(QString::fromUtf8("horizontalLayout_12"));
+        verticalLayout_3 = new QVBoxLayout();
+        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+        ip_lb = new QLabel(layoutWidget3);
+        ip_lb->setObjectName(QString::fromUtf8("ip_lb"));
+        ip_lb->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        verticalLayout_3->addWidget(ip_lb);
+
+        port_lb = new QLabel(layoutWidget3);
+        port_lb->setObjectName(QString::fromUtf8("port_lb"));
+        port_lb->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        verticalLayout_3->addWidget(port_lb);
+
+
+        horizontalLayout_12->addLayout(verticalLayout_3);
+
+        verticalLayout_6 = new QVBoxLayout();
+        verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
+        ip_le = new QLineEdit(layoutWidget3);
+        ip_le->setObjectName(QString::fromUtf8("ip_le"));
+
+        verticalLayout_6->addWidget(ip_le);
+
+        port_le = new QLineEdit(layoutWidget3);
+        port_le->setObjectName(QString::fromUtf8("port_le"));
+
+        verticalLayout_6->addWidget(port_le);
+
+
+        horizontalLayout_12->addLayout(verticalLayout_6);
+
+
+        verticalLayout_7->addLayout(horizontalLayout_12);
+
+        server_connect_btn = new QPushButton(layoutWidget3);
+        server_connect_btn->setObjectName(QString::fromUtf8("server_connect_btn"));
+
+        verticalLayout_7->addWidget(server_connect_btn);
+
+        label_3 = new QLabel(tab);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+        label_3->setGeometry(QRect(30, 10, 81, 17));
+        label_3->setAutoFillBackground(true);
+        label_3->setAlignment(Qt::AlignCenter);
+        tabWidget->addTab(tab, QString());
 
         verticalLayout->addWidget(tabWidget);
 
-        layoutWidget3 = new QWidget(Widget);
-        layoutWidget3->setObjectName(QString::fromUtf8("layoutWidget3"));
-        layoutWidget3->setGeometry(QRect(0, 0, 2, 2));
-        horizontalLayout_5 = new QHBoxLayout(layoutWidget3);
-        horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
-        horizontalLayout_5->setContentsMargins(0, 0, 0, 0);
         layoutWidget4 = new QWidget(Widget);
         layoutWidget4->setObjectName(QString::fromUtf8("layoutWidget4"));
         layoutWidget4->setGeometry(QRect(0, 0, 2, 2));
-        horizontalLayout_6 = new QHBoxLayout(layoutWidget4);
+        horizontalLayout_5 = new QHBoxLayout(layoutWidget4);
+        horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
+        horizontalLayout_5->setContentsMargins(0, 0, 0, 0);
+        layoutWidget5 = new QWidget(Widget);
+        layoutWidget5->setObjectName(QString::fromUtf8("layoutWidget5"));
+        layoutWidget5->setGeometry(QRect(0, 0, 2, 2));
+        horizontalLayout_6 = new QHBoxLayout(layoutWidget5);
         horizontalLayout_6->setObjectName(QString::fromUtf8("horizontalLayout_6"));
         horizontalLayout_6->setContentsMargins(0, 0, 0, 0);
 
         retranslateUi(Widget);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(Widget);
@@ -443,6 +518,11 @@ public:
         altitude_lb->setText(QCoreApplication::translate("Widget", "\346\265\267\346\213\224:", nullptr));
         satellite_num_lb->setText(QCoreApplication::translate("Widget", "\345\215\253\346\230\237\346\225\260\351\207\217:", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(device_location_tab), QCoreApplication::translate("Widget", "\350\256\276\345\244\207\345\256\232\344\275\215", nullptr));
+        ip_lb->setText(QCoreApplication::translate("Widget", "IP:", nullptr));
+        port_lb->setText(QCoreApplication::translate("Widget", "\347\253\257\345\217\243\345\217\267:", nullptr));
+        server_connect_btn->setText(QCoreApplication::translate("Widget", "\350\277\236\346\216\245", nullptr));
+        label_3->setText(QCoreApplication::translate("Widget", "\346\234\215\345\212\241\345\231\250\344\277\241\346\201\257", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("Widget", "\347\275\221\347\273\234\350\277\236\346\216\245", nullptr));
     } // retranslateUi
 
 };

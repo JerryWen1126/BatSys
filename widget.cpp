@@ -248,3 +248,7 @@ void Widget::on_gps_locate_btn_clicked()
 }
 
 
+void Widget::on_server_connect_btn_clicked()
+{
+    qDebug() << "1";
+}

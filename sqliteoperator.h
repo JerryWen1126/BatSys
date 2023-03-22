@@ -48,6 +48,7 @@ private slots:
     void on_confirm_edit_btn_clicked();
 
 
+
 private:
     QSqlDatabase db;
     Ui::Widget* ui;
