@@ -11,11 +11,13 @@ CONFIG += c++17
 SOURCES += \
     gps_device.cpp \
     main.cpp \
+    record_sync.cpp \
     sqliteoperator.cpp \
     widget.cpp
 
 HEADERS += \
     gps_device.h \
+    record_sync.h \
     sqliteoperator.h \
     widget.h
 

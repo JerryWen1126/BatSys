@@ -8,6 +8,7 @@ Widget::Widget(QWidget *parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
+    this->showFullScreen();
     progame_init();
 }
 
@@ -110,17 +111,35 @@ void Widget::on_camera_open_close_btn_clicked()
     if(!is_camera_opened)
     {
         qDebug() << "Camera is opened";
+    QString camera_file_name;
+        // check if it is csi camera
+        if(!is_csi_camera)
+        {
+            camera_file_name = ui->camera_index_cb->currentText();
+            int camera_index = QString(camera_file_name.at(camera_file_name.size() - 1)).toInt();
+            videocaptrue = new cv::VideoCapture(camera_index);
+        }
+        else // start csi camera
+        {
 
-        QString camera_file_name = ui->camera_index_cb->currentText();
-        int camera_index = QString(camera_file_name.at(camera_file_name.size() - 1)).toInt();
+        }
 
-        videocaptrue = new cv::VideoCapture(camera_index);
+
 
         if(!(videocaptrue->isOpened()))
         {
-            qDebug() << "camera open failed";
-            QMessageBox::critical(this, "警告", QString("摄像头(%1)打开失败").arg(camera_file_name), QMessageBox::Ok);
-            return;
+            if(!is_csi_camera)
+            {
+                qDebug() << "usb camera open failed";
+                QMessageBox::critical(this, "警告", QString("摄像头(%1)打开失败").arg(camera_file_name), QMessageBox::Ok);
+                return;
+            }
+            else
+            {
+                qDebug() << "csi camera open failed";
+                QMessageBox::critical(this, "警告", QString("CSI摄像头打开失败"), QMessageBox::Ok);
+                return;
+            }
         }
         camera_get_frame_timer->start(33);
         ui->camera_open_close_btn->setText("关闭摄像头");
@@ -232,9 +251,13 @@ void Widget::on_is_csi_camera_cb_stateChanged(int arg1)
     if(arg1 == 2)   // checkbox is on
     {
         ui->camera_index_cb->setEnabled(false);
+        is_csi_camera = true;
     }
     else
+    {
         ui->camera_index_cb->setEnabled(true);
+        is_csi_camera = false;
+    }
 }
 
 void Widget::on_gps_locate_btn_clicked()
@@ -250,5 +273,12 @@ void Widget::on_gps_locate_btn_clicked()
 
 void Widget::on_server_connect_btn_clicked()
 {
-    qDebug() << "1";
+    qDebug() << QString::fromStdString(gstreamer_pipeline(640, 480, 320, 240, 10, 0));
 }
+
+std::string Widget::gstreamer_pipeline(int capture_width, int capture_height, int display_width, int display_height, int framerate, int flip_method)
+{
+    return "nvarguscamerasrc ! video/x-raw(memory:NVMM), width=(int)" + std::to_string(capture_width) + ", height=(int)" + std::to_string(capture_height) + ", format=(string)NV12, framerate=(fraction)" + std::to_string(framerate) + "/1 ! nvvidconv flip-method=" + std::to_string(flip_method) + " ! video/x-raw, width=(int)" + std::to_string(display_width) + ", height=(int)" + std::to_string(display_height) + ", format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink";
+}
+
+

@@ -14,6 +14,8 @@
 #include <QDir>
 #include <QWebChannel>
 #include <gps_device.h>
+#include <string>
+#include <iostream>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget;
@@ -35,6 +37,7 @@ public:
     void progame_init();
     void get_camera_index();
     void webmap_init();
+    std::string gstreamer_pipeline(int, int, int, int, int, int);
 
 private slots:
     void on_exit_btn_clicked();
@@ -61,6 +64,7 @@ private:
     QTimer *camera_get_frame_timer;
     cv::Mat frame_mat;
     bool is_camera_opened = false;
+    bool is_csi_camera = false;
 
     QPixmap pixmap; // pixmap to share the img that camera have collected
     SqliteOperator *sql_op;
