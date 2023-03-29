@@ -8,7 +8,7 @@ Widget::Widget(QWidget *parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
-    this->showFullScreen();
+//    this->showFullScreen();
     progame_init();
 }
 
@@ -26,6 +26,7 @@ Widget::~Widget()
     delete camera_get_frame_timer;
     delete sql_op;
     delete gps_op;
+    delete rs_op;
 
 }
 
@@ -83,6 +84,7 @@ void Widget::progame_init()
     ui->bat_record_tw->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->bat_record_tw->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     sql_op->refreshTable();
+    connect(ui->check_sync_btn, SIGNAL(clicked(bool)), sql_op->work, SLOT(check_and_make_json()));
 
     // init the web map
     webmap_init();
@@ -91,6 +93,9 @@ void Widget::progame_init()
     gps_op = new GPSDevice(ui);
     connect(ui->openserial_btn, SIGNAL(clicked(bool)), gps_op, SLOT(on_openserial_btn_clicked()));
 
+    // init the network connection
+    rs_op = new RecordSync(ui);
+    connect(ui->server_connect_btn, SIGNAL(clicked(bool)),rs_op, SLOT(on_server_connect_btn_clicked()));
 
 
     return;
@@ -203,6 +208,7 @@ void Widget::on_insert_data_btn_clicked()
     QString test_class = "test_class1";
     QString test_chance = "90.00%";
     sql_op->insertData(byte_arr, test_class, test_chance);
+
 }
 
 
@@ -271,10 +277,7 @@ void Widget::on_gps_locate_btn_clicked()
 }
 
 
-void Widget::on_server_connect_btn_clicked()
-{
-    qDebug() << QString::fromStdString(gstreamer_pipeline(640, 480, 320, 240, 10, 0));
-}
+
 
 std::string Widget::gstreamer_pipeline(int capture_width, int capture_height, int display_width, int display_height, int framerate, int flip_method)
 {

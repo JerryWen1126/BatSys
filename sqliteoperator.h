@@ -10,14 +10,19 @@
 #include <ui_widget.h>
 #include <ui_edit_dialog.h>
 #include <QMessageBox>
+#include <QThread>
 
 #define DATABASE_CONNECTION_NAME "qt_sql_default_connection"
 #define DATABASE_TYPE "QSQLITE"
 #define DATABASE_FILENAME "BatRecord.db"
 
 
+
+class JsonWork;
+
 class SqliteOperator: public QObject
 {
+    friend class JsonWork;
     Q_OBJECT
 public:
     SqliteOperator(Ui::Widget *, QWidget *parent = nullptr);
@@ -42,6 +47,7 @@ public:
     // fetch the records num
     unsigned int fetchRecordsNum();
 
+
 private slots:
     void on_edit_item_btn_clicked();
     void on_delete_item_btn_clicked();
@@ -56,6 +62,23 @@ private:
     QDialog* dialog;
     bool is_edit_dialog_opened = false;
     unsigned int count;
+public:
+    JsonWork* work;
 };
+
+class JsonWork: public QObject
+{
+    Q_OBJECT
+public:
+    JsonWork(SqliteOperator *, QObject *parent = nullptr);
+    ~JsonWork();
+
+private slots:
+    void check_and_make_json();
+
+public:
+    SqliteOperator *sql_op;
+};
+
 
 #endif // SQLITEOPERATOR_H

@@ -31,6 +31,7 @@ Widget::Widget(QWidget *parent)
 Widget::~Widget()
 {
     delete ui;
+    delete m_tcp;
 }
 
 

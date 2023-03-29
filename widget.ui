@@ -181,6 +181,13 @@
             </widget>
            </item>
            <item>
+            <widget class="QPushButton" name="check_sync_btn">
+             <property name="text">
+              <string>未同步检查</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="verticalSpacer">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -525,10 +532,18 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_6">
               <item>
-               <widget class="QLineEdit" name="ip_le"/>
+               <widget class="QLineEdit" name="ip_le">
+                <property name="text">
+                 <string>127.0.0.1</string>
+                </property>
+               </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="port_le"/>
+               <widget class="QLineEdit" name="port_le">
+                <property name="text">
+                 <string>8888</string>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
@@ -537,7 +552,7 @@
           <item>
            <widget class="QPushButton" name="server_connect_btn">
             <property name="text">
-             <string>连接</string>
+             <string>建立连接</string>
             </property>
            </widget>
           </item>

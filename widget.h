@@ -16,6 +16,7 @@
 #include <gps_device.h>
 #include <string>
 #include <iostream>
+#include <record_sync.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget;
@@ -53,7 +54,6 @@ private slots:
     void on_tabWidget_currentChanged(int);
     void on_is_csi_camera_cb_stateChanged(int);
     void on_gps_locate_btn_clicked();
-    void on_server_connect_btn_clicked();
 
 
 private:
@@ -67,8 +67,11 @@ private:
     bool is_csi_camera = false;
 
     QPixmap pixmap; // pixmap to share the img that camera have collected
-    SqliteOperator *sql_op;
     GPSDevice *gps_op;
+    RecordSync *rs_op;
+    SqliteOperator *sql_op;
+public:
+
 
 };
 #endif // WIDGET_H

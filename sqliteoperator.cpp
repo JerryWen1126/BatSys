@@ -4,6 +4,8 @@ SqliteOperator::SqliteOperator(Ui::Widget *ui, QWidget *parent)
     :QObject(parent)
 {
     this->ui = ui;
+
+    work = new JsonWork(this);
 }
 
 SqliteOperator::~SqliteOperator()
@@ -14,6 +16,7 @@ SqliteOperator::~SqliteOperator()
         delete edit_ui;
         delete dialog;
     }
+    delete work;
 }
 
 
@@ -138,6 +141,7 @@ bool SqliteOperator::removeData(unsigned int id)
 
 bool SqliteOperator::updateData()
 {
+    open_DB();
     QString update_data_command = "update bat_records set classification = :classification where id = :id;";
     QSqlQuery sql_query;
     sql_query.prepare(update_data_command);
@@ -147,11 +151,13 @@ bool SqliteOperator::updateData()
     if(!sql_query.exec())
     {
         qDebug() << "Error:Failed to update the data." << sql_query.lastError();
+        close_DB();
         return false;
     }
     else
     {
         qDebug() << "Data updated!";
+        close_DB();
         return true;
     }
 }
@@ -162,7 +168,7 @@ void SqliteOperator::refreshTable()
     ui->bat_record_tw->setRowCount(fetchRecordsNum());
     open_DB();
     QSqlQuery sql_query;
-    QString query_command = "select * from bat_records";
+    QString query_command = "select * from bat_records;";
     sql_query.prepare(query_command);
     if(!sql_query.exec())
         qDebug() << "Error:Failed to fetch data from the table." << sql_query.lastError();
@@ -330,17 +336,53 @@ void SqliteOperator::on_delete_item_btn_clicked()
 
 void SqliteOperator::on_confirm_edit_btn_clicked()
 {
-    open_DB();
     if(!updateData())// TODO
         QMessageBox::critical(nullptr, "警告", "数据库连接失败", QMessageBox::Ok);
     else refreshTable();
 
-    close_DB();
     return;
 }
 
 
 
+JsonWork::JsonWork(SqliteOperator *sql_op, QObject *parent):QObject(parent)
+{
+    this->sql_op = sql_op;
+}
+
+JsonWork::~JsonWork()
+{
+
+}
+
+void JsonWork::check_and_make_json()
+{
+    sql_op->open_DB();
+    QString select_data_command = "select * from bat_records where sync_status=FALSE;";
+    QSqlQuery sql_query;
+    sql_query.prepare(select_data_command);
+
+    if(!sql_query.exec())
+        qDebug() << "Error:Failed to check the data and make json." << sql_query.lastError();
+    else
+    {
+        qDebug() << "======Check the data that not synced!======";
+        while(sql_query.next())
+        {
+            int id = sql_query.value("id").toInt();
+            QString timestamp = sql_query.value("timestamp").toString();
+            QString classifation = sql_query.value("classification").toString();
+            QString predict_chance = sql_query.value("predict_chance").toString();
+
+            qDebug() << "id:" << id << " time:" << timestamp << " class:" << classifation << " predict:" << predict_chance;
+        }
+        qDebug() << "===========================================";
+
+    }
+
+    sql_op->close_DB();
+    return;
+}
 
 
 
